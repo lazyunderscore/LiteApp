@@ -1,3 +1,16 @@
+看了前端FE目录部分，非常值得借鉴的写法。使用beyond compare 对比platform/web和platform/qy 会有惊喜：
+modules(attr, props, class, style)操作几乎没有改；node-ops接口一一对应。这里最漂亮的实现，抽象了一层QNode，vnode.el变成QNode类型，那么原有modules上的操作，例如modules/style.js里边的setProperty, el.setStyle(), modules/events.js里边的addEventListener/removeEventListener等，直接转换到QNode的实现里，无需改动modules文件。node-ops非常好理解，就是普通的节点操作。
+QNode在js层做了id维护。
+addDirect是jsBridge的通讯方法，分为dom, attr, com, api, native5类。前面3类用在node-ops和modules，后面应该是native特殊能力的调用，源码使用很少。
+
+入口与环境判定。Android和iOS往v8或者JSC的global对象中，注入了__base__对象，通过__base__对象判断。具体看env文件实现，另外vue本身的env可能有冲突，未查看，应该是个小问题。
+
+platform/qy/webview应该是无用的，未看到哪个文件有所引用。
+
+npm run build直接只build出qy相关vue runtime，rollup的entry就是src/platform/node-ops.
+
+这个项目确实足够简单，未写入过多繁琐逻辑，比weex容易看多啦 ~ weex有些为了复杂而复杂的感觉。我认为前端部分是最薄的才对，不要整那么多逻辑。重心还是要下沉都native。
+
 # Introduction
 
 <p align="center" >
